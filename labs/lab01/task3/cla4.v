@@ -29,9 +29,45 @@ module cla4(
 
   wire p0, p1, p2, p3;
   wire g0, g1, g2, g3;
-  wire c1, c2, c3;
+  wire c1, c2, c3, c4;
 
   // TODO: your gate-level P/G, carry, and sum logic goes here.
   // (cout should be connected to c4.) Remember the delay on every gate.
+  //Propagate Generate
+  xor #(2) pinst0 (p0 , a[0], b[0]);
+  and #(2) ginst0 (g0 , a[0], b[0]);
+
+  xor #(2) pinst1 (p1 , a[1], b[1]);
+  and #(2) ginst1 (g1 , a[1], b[1]);
+  
+  xor #(2) pinst2 (p2 , a[2], b[2]);
+  and #(2) ginst2 (g2 , a[2], b[2]);
+  
+  xor #(2) pinst3 (p3 , a[3], b[3]);
+  and #(2) ginst3 (g3 , a[3], b[3]);
+  
+  //Carry Equations
+  wire w1, w2, w3, w4;
+  or #(2) or1 (c1 , g0 , w1);
+  and #(2) and1 (w1, p0, cin);
+
+  or #(2) or2 (c2 , g1 , w2);
+  and #(2) and2 (w2, p1, c1);
+
+  or #(2) or3 (c3 , g2 , w3);
+  and #(2) and3 (w3, p2, c2);
+
+  or #(2) or4 (c4 , g3 , w4);
+  and #(2) and4 (w4, p3, c3);
+
+  //sum logic
+  xor #(2) sum0 (sum[0] , p0 , cin );
+  xor #(2) sum1 (sum[1] , p1 , c1 );
+  xor #(2) sum2 (sum[2] , p2 , c2 );
+  xor #(2) sum3 (sum[3] , p3 , c3 );
+
+  assign cout = c4;
+
+
 
 endmodule
